@@ -1,4 +1,4 @@
-import Csv
+import CsvViewer.Core
 import System.Environment
 
 main = do

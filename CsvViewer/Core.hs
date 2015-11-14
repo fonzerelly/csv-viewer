@@ -1,11 +1,9 @@
-module Csv where
+module CsvViewer.Core where
 
 import Data.List
 import Data.List.Split
 
-type Row = [String]
-type Col = [String]
-type Range = Int
+import CsvViewer.Types
 
 splitIntoRows :: String -> [Row]
 splitIntoRows = map (splitOn ";") . lines
@@ -45,8 +43,4 @@ joinRowsByPipe = unlines . (map join)
 
 displayCsv :: String -> String
 displayCsv = joinRowsByPipe . transformTable. splitIntoRows
--- joinRowsToOneString
--- displayCsv :: String -> String
--- displayCsv s = rebuildTable . transformTable . destructTable
---          rebuildTable = unlines . (intersperse '|')
---          transformTable = fromColumns . maximizeColumns . toColumns
+

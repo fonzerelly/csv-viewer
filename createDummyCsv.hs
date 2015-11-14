@@ -2,10 +2,7 @@ import System.Environment
 import System.Random
 import System.Time
 import Data.List
-
-type Row = [String]
-type Col = [String]
-type Range = Int
+import CsvViewer.Types
 
 main = do
    args <- getArgs
