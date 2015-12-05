@@ -4,6 +4,7 @@ import Data.List
 import Data.List.Split
 
 import CsvViewer.Types
+import System.Console.Terminal.Size
 
 splitIntoRows :: String -> [Row]
 splitIntoRows = map (splitOn ";") . lines
@@ -44,3 +45,16 @@ joinRowsByPipe = unlines . (map join)
 displayCsv :: String -> String
 displayCsv = joinRowsByPipe . transformTable. splitIntoRows
 
+slice :: Int -> Int -> [a] ->  [a]
+slice u l rs = take l $ drop u rs
+
+truncateTable :: [Row] -> CellOffset -> Window Int -> String
+truncateTable rs co w = unlines $ takeWidth $ stringifyRows $ skipRows $ skipCols rs
+   where
+      takeWidth = map (take (width w))
+      stringifyRows = (map (intercalate "|"))
+      skipCols = map (drop (fst co))
+      skipRows = slice (snd co) (height w)
+
+resize :: (Num a) => Window a -> a -> a -> Window a
+resize win h w = Window ((height win) + h) ((width win) + w)
