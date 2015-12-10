@@ -19,7 +19,13 @@ dispatchUserInput :: [Row] -> CellOffset -> IO ()
 dispatchUserInput contents offset = do
    s <- size
    let w = resize (fromJust s) 0 (-1)
-       calcVisibleCols index = length visibleRowPart + (sum (map length visibleRowPart))
+   putStrLn $ truncateTable contents offset w
+   dispatch contents offset w
+
+
+dispatch :: [Row] -> CellOffset -> Window Int -> IO ()
+dispatch contents offset w = do
+   let calcVisibleCols index = length visibleRowPart + (sum (map length visibleRowPart))
          where visibleRowPart = init (drop index (head contents))
 
        handleKey offset UP
@@ -35,11 +41,14 @@ dispatchUserInput contents offset = do
          | (fst offset) > 0 = ((fst offset - 1), (snd offset))
          | otherwise = offset
 
-   putStrLn $ truncateTable contents offset w
    c <- catchKey
    if c == QUIT
       then return ()
       else do
-         setCursorPosition 0 0
-         dispatchUserInput contents (handleKey offset c)
+         let newOffset = handleKey offset c
+         if newOffset == offset
+            then dispatch contents offset w
+            else do
+               setCursorPosition 0 0
+               dispatchUserInput contents newOffset
 
