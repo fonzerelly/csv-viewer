@@ -43,7 +43,9 @@ dispatch contents offset w = do
 
    c <- catchKey
    if c == QUIT
-      then return ()
+      then do
+         clearScreen
+         return ()
       else do
          let newOffset = handleKey offset c
          if newOffset == offset
