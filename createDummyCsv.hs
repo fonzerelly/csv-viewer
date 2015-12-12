@@ -23,7 +23,8 @@ createRandomRow gen maxLength = randomList g n
    where (n, g) = randomR (0, maxLength) gen :: (Int, StdGen)
          randomList gl 0 = ([], gl)
          randomList gl n = (word : (fst $ randomList gw $ n-1), gw)
-            where (word, gw) = createRandomWord gl 20
+            where (word, gw) = createRandomWord gl mx
+                  (mx, gx) = randomR(0, maxLength) gen :: (Int, StdGen)
 
 createRandomTable :: StdGen -> Int -> Int -> [Row]
 createRandomTable _ 0 _ = []
